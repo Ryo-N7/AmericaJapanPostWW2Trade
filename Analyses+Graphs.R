@@ -7,7 +7,7 @@ library(scales)
 steelprod <- read.csv("~/R materials/AmericaJapanPostWW2Trade/Data/JapanSteelProduction(1950-1960).csv")
 steelprod
 
-steelprod %>% ggplot(aes(x = Year, y = Steel.production)) + geom_line(size = 4) +
+steelprod %>% ggplot(aes(x = Year, y = Steel.production)) + geom_line(size = 2.5) +
   theme_economist() +
   theme(axis.text = element_text(size = 10), axis.title = element_text(size = 15)) +
   scale_x_continuous(breaks = pretty_breaks(n = 10)) +
