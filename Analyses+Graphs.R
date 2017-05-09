@@ -32,7 +32,7 @@ JapanCamera %>% ggplot(aes(x = Year, y = value, group = variable)) + geom_line()
 
 JapanCamera %>% ggplot(aes(x = Year, y = Japanese.Camera.Production)) + 
   geom_line(size = 2) + 
-  geom_point(aes(y = Japanese.Camera.Production), color = "blue") +
+  geom_point(aes(y = Japanese.Camera.Production), color = "red") +
   geom_line(aes(y = USA.Import.of.Japanese.Cameras), color = I("red"), size = 2) +
   geom_point(aes(y = USA.Import.of.Japanese.Cameras)) +
   scale_x_continuous(breaks = pretty_breaks(n = 20)) + 
@@ -69,9 +69,24 @@ JapanCotton %>% rename(Cotton.From.Japan.Exports = Japan.Cotton.Textile.Exports.
         axis.text = element_text(size = 7), 
         title = element_text(size = 7.5),
         plot.title = element_text(hjust = 0.5)) +
-  labs(x = "Year", y = "Camera Production (Units)", 
+  labs(x = "Year", y = "Cotton Production (Million Yards)", 
        title = "USA Total Cotton Exports and Cotton Exports from Japan \n (1945-1960)")
 
+
+
+JapanCotton %>% rename(Cotton.From.Japan.Exports = Japan.Cotton.Textile.Exports.to.USA..million.square.yards.,
+                       All.USA.Exports = Cotton.Textile.Exports.to.USA..million.square.yards.) %>% 
+  ggplot(aes(Year, y = All.USA.Exports)) + 
+  geom_line(size = 1.5) + geom_point(color = I("red"), size = 3) +
+  scale_x_continuous(breaks = pretty_breaks(n = 20)) + 
+  scale_y_continuous(breaks = pretty_breaks(n = 6), labels = comma) +
+  theme_wsj() +
+  theme(axis.title = element_text(size = 10),
+        axis.text = element_text(size = 7), 
+        title = element_text(size = 7.5),
+        plot.title = element_text(hjust = 0.5)) +
+  labs(x = "Year", y = "Cotton Production (Million Yards)", 
+       title = "USA Total Cotton Imports \n (1945-1960)")
 
 
 
