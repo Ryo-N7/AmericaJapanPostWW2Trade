@@ -1,0 +1,45 @@
+---
+title: "japan_postwar_recovery"
+author: "RN7"
+date: "January 3, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Exploring Japan's Postwar Economic Miracle with ggplot2 & gganimate!
+
+
+US economic history class:
+originally created the graphs for this research paper with excel
+
+prior to discovering R in seniro year econometrics
+
+a year ago i went back and recreated the graphs using ggplot2 for some easy practice as i was still getting used to using R
+
+now i am going a small step above by implementing gganimate into my code!
+
+small article >>> outline paper 
+
+not a lot of code as no need for data munging as correctly input directly into excel file from looking at statistical abstract in library or the pdf version on my computer...!
+
+just a small background into gganimate!
+LINKS:
+VIDEOS: DR at plotcon
+
+data musings:
+
+doing research oldschool, pouring through US statistcal abstracts in the library and
+finding the right pdf files >>> inputting them by hand into excel files....
+
+- https://www.census.gov/library/publications/1951/compendia/1951statab.html
+- https://www.census.gov/library/publications/time-series/statistical_abstracts.html
+served to remind me of how fortunate i am of living in this day and age where (nearly) any data can be found with a few google/wikipedia searches!
+
+
+
+
+
+
