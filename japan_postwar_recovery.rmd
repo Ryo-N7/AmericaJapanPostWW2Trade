@@ -11,11 +11,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Exploring Japan's Postwar Economic Miracle with ggplot2 & gganimate!
 
+In this blogpost I weave in a gganimate and tweenr tutorial while exploring the American policies that aided Japan's postwar economic miracle!
 
 US economic history class:
 originally created the graphs for this research paper with excel
 
-prior to discovering R in seniro year econometrics
+prior to discovering R in senior year econometrics
 
 a year ago i went back and recreated the graphs using ggplot2 for some easy practice as i was still getting used to using R
 
@@ -28,42 +29,43 @@ not a lot of code as no need for data munging as correctly input directly into e
 ## Postwar Japan and the Korean War
 Under American occupation, Japan was barely surviving on subsidies and US aid as the Supreme Commander of the Allied Powers (SCAP) restricted Japan's foreign trade and international transactions. The main goal, initially, was to cripple the Japanese economy (especially in terms of its heavy industries) so that it could never produce military goods again (Ohno, 2005). Some of the reforms initiated by SCAP include the breaking up of the __zaibatsu__ (family-owned mega-conglomerates that had a large role in Japanese war industries), new labor laws, land reform, and the well-known Constitutional reforms (the renunciation of the Emperor as a God and Article 9 which renounced war).  
 
-In 1948, President Truman asked Joseph Dodge for help in reconstructing Japan's economy due to his successes in rebuilding Germany amidst the looming threat of Communism in Asia with Mao's forces inching closer to total victory over the Kuomintang. Introducing austerity measures and setting a advantageous exchange rate for Japan among other policies which helped combat inflation, Dodge nevertheless caused severe adverse economic shocks and economic output tanked. Fortunately, Japan's saving grace came with the start of the Korean War in 1950.
+In 1948, President Truman asked Joseph Dodge for help in reconstructing Japan's economy due to his successes in rebuilding Germany midst the looming threat of Communism in Asia with Mao's forces inching closer to total victory over the Kuomintang. Introducing austerity measures and setting a advantageous exchange rate for Japan among other policies which helped combat inflation, Dodge nevertheless caused severe adverse economic shocks and economic output tanked. Fortunately, Japan's saving grace came with the start of the Korean War in 1950.
 
 With high external demand leading to an export boom, Japan's recession ended quickly and the economy boomed as industrial output increased by more than 50% between 1950 and 1951, export values increased by 53%, and the total value of foreign trade increased by 84% (Dingman, 1993). This huge influx of dollars provided the investment needed for many different sectors of the Japanese economy to modernize their means of production (Dingman, 1993). 
 
 ## Shifts in American policy regarding the Japanese economy
 
+From around 1947 there was a profound shift away from the initial American policies aimed at limiting Japanese heavy industry. While diplomats such as William R. Castle emphasized the rhetoric that Japan can serve as a capitalist bulwark against Soviet expansion into Asia, American policy makers preoccupied with postwar economic issues saw Japanese economic recovery as a solution to domestic problems (Schonberger, 1982). Gradually, politicians such as George Kennan (Policy Planning Staff in the State Department) and William Draper (Army Undersecretary) moved to dilute the impact of SCAP policies such as the __zaibatsu__ dissolution reform "FEC-230" (Schonberger, 1982). Their revision, modelled after the Marshall Plan, argued that a two year burst of aid appropriations would increase Japanese exports and thereby foreign exchange for imports of basic necessities and allow for the United States to stop sending aid by 1953 (Schonberger, 1982). 
 
+SCAP and MacArthur refused to cooperate as they believed the __zaibatsu__ were militarists and a fundamental change of the Japanese economic system was needed. However, in the summer of 1948, MacArthur acquiesced and the reform only broke up 19 of the 324 planned firms while banks were exempted altogether (Schonberger, 1982). Other factors tied into this such as the traditionally strong Japanese legal support for __zaibatsu__ and the lobbying to Congress by American corporations with ties to these Japanese companies. As a result most __zaibatsu__ were modified into __keiretsu__ (bank-centered, industrial conglomerates) and American foreign grants/credits to Japan declined sharply by 1953 (Statistical Abstract of the United States 1954, pp. 902; Statistical Abstract of the United States 1960, pp. 906). 
 
 ## Steel industry
 - overview
-- show static
-```{r packages}
-library(dplyr) # pipes
-library(readr)
 
-library(ggplot2)
-library(ggthemes)
-library(scales)
+The steel and coal industry was one of the first industries targeted to revitalize the economy as both the Japanese government and SCAP recognized them as a valuable input for other industries (Elbaum, 2007; Fletcher, 2006). Coal was Japan's only domestically available resource and it was believed that increased coal output would lead to increased steel manufacturing, leading to increased allocation of steel for coal production, presenting a positive feedback loop for the economy. With the profits from the Korean War through US military procurement reinvested throughout the '50s, the steel industry contributed heavily to overall productivity gain and steel production rose up and above pre-war levels (Ohno, 2006). 
+
+## Steel production plot
+
+(NOTE: I originally used data from Statistical Abstract of the United States (editions between 1950 and 1960), in process of writing this article I tried to find more data from before 1950 and came across the Historical Statistics of Japan (by the Japan Statistical Association) that has the crude steel production from 1948 to 2004. Although the Statistical Abstract data matched up well with the Japanese source I elected to recreate this graph from the Historical Statistics of Japan data instead.)
+
+```{r packages steel static}
+library(magrittr) # pipes
+library(readr)    # reading in .csv files
+
+library(ggplot2)  # plotting
+library(ggthemes) # ggplot2 themes
+library(scales)   # ggplot2 scaling options
 
 
 Japan_Steel <- read_csv("Data/JapanSteelProduction(1950-1960).csv",
                       col_names = c("Year", "Steel_Production"),
                       skip = 1)
 
-
-glimpse(Japan_Steel)
-
-```
-
-```{r steel static}
-
 Japan_Steel %>% 
   ggplot(aes(x = Year, y = Steel_Production)) + 
   geom_line(size = 2.5, color = "#474747") +
   scale_x_continuous(breaks = pretty_breaks(n = 10)) +
-  scale_y_continuous(breaks = pretty_breaks(), label = comma) +
+  scale_y_continuous(breaks = pretty_breaks(), labels = comma, limits = c(0, 26000)) +
   geom_vline(xintercept = 1950) +
   geom_vline(xintercept = 1953) +
   theme_economist_white() +
@@ -76,12 +78,12 @@ Japan_Steel %>%
 
 ```
 
-
 ## just a small background into gganimate!
 LINKS:
 VIDEOS: DR at plotcon
 
 - show gganimated
+
 ```{r steel animated}
 library(gganimate)
 
@@ -102,6 +104,9 @@ gganimate(steel_animate)
 
 ## Camera industry
 - overview
+
+The camera industry had a quick recovery as the camera companies were one of the earliest to receive permits to resume production by SCAP in early 1946 and Japan already had all the raw materials needed for production (Nelson, 1998). The American military post exchanges (PX) throughout the Korean and Vietnam Wars allowed for large influx in dollars for Japan through camera and lens sales due to demand from American soldiers and also allowed Japanese camera products (most notably familiar companies such as Nikon and Canon) to enter the American market through its popularity among the returning American personnel (Nelson, 1998). By the 1970s, when American policies shifted regarding Japan's favorable exchange rate, it did not matter as Japan no longer needed to rely solely on the US market as it had in its postwar infancy (Nelson, 1998). 
+
 - show static
 ```{r camera static}
 
@@ -117,14 +122,17 @@ Japan_Camera %>%
   scale_y_continuous(labels = c("0", "500,000", "1 Million", "1.5 Million", "2 Million")) +
   scale_color_manual(values = c("Camera Production" = "#474747", 
                                 "USA Imports" = "black")) +
+  geom_vline(xintercept = 1950) +
   geom_vline(xintercept = 1953) +
-  geom_text()
+  annotate(geom = "text", 
+           label = "Korean\nWar", size = 5, color = "#474747",
+           x = 1951.5, y = 1000000) +
   theme_bw() +
   theme(axis.title = element_text(size = 10),
         axis.text = element_text(size = 8), 
         title = element_text(size = 9.5),
         plot.title = element_text(hjust = 0.5),
-        legend.position = c(0.25, 0.8),
+        legend.position = c(0.15, 0.9),
         legend.title = element_blank()) +
   labs(x = "Year", y = "Japanese Cameras (Units)", 
        title = "Japanese Camera Production and USA Imports of Japanese Cameras\n (1945-1960)")
@@ -132,6 +140,9 @@ Japan_Camera %>%
 ```
 
 - show gganimated
+- explain tweenR
+
+
 ```{r camera animated}
 
 camera_animate <- Japan_Camera %>% 
@@ -154,6 +165,15 @@ gganimate(camera_animate)
 
 ## Cotton textiles industry
 - overview
+
+As a result of the loss of its overseas territories, Japan lost 2.75 million cotton spindles from China and Manchuria with a further 210,000 in Korea (Fletcher, 2006). With the United States' help, however, the cotton textiles industry became the leading export industry from 1946-1960 (taking up around 59% of the dollar value of all Japanese exports) which allowed for raw material and food imports into devastated Japan (Fletcher, 2006; Sugihara, 1999). 
+
+The United States pursued this initiative due to the accumulation of raw cotton by the Commodity Credit Corporations from various __New Deal__ policies dating back to the Great Depression; exporting this raw cotton to Japan would increase government revenue and raise cotton prices for the benefit of American producers (Fletcher, 2006; Abe, 2005).
+
+The American government also believed that this course of action would help relieve American taxpayer the burden of paying aid/subsidies for Japanese imports of basic necessities by allowing Japan to sustain itself through its textile exports as well as reinvest the dollars earned into other recovering industries (Abe, 2005; Fletcher, 2006). 
+
+As a result, by 1951, Japan had become the largest exporter of cotton textiles in the world with a large percentage of the approximately 2.9 billion square yards produced each year (1955-1970) going to the United States (Abe, 2005). As the domestic American textile market applied pressure to install export quotas, the share of Japanese textile exports fell from 72% in 1957 to a mere 20% in 1960. However, the entry of other Asian countries into the American market made these quotas against Japanese exports meaningless and the Japanese economy began to focus on other industries from the 1960s onwards, most famously, the automobile industry.
+
 - show static
 ```{r textiles static}
 
@@ -165,16 +185,20 @@ gganimate(camera_animate)
 ```
 
 ## Comparison with original excel graphs
-- []()
-- []()
-- []()
+- [Steel industry]()
+- [Camera industry]()
+- [Cotton textile industry]()
 
 ## Conclusion
 - summary of research
 
+Despite the devastation of the Allied bombing campaigns and the initial SCAP policies, the growing tensions of the Cold War and the postwar needs of America became the catalyst for a dramatic heel-turn in economic policy that laid the foundations for a miraculous Japanese recovery. By studying the causes and impacts of external/internal events and policies  we can gain clues to tackle the future challenges in rebuilding economies in other war-devastated areas of the world. 
+
+
+
 - data musings:
 
-doing research oldschool, pouring through US statistcal abstracts in the library and
+doing research old school, pouring through US statistical abstracts in the library and
 finding the right pdf files >>> inputting them by hand into excel files....
 
 - https://www.census.gov/library/publications/1951/compendia/1951statab.html
