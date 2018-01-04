@@ -25,11 +25,154 @@ small article >>> outline paper
 
 not a lot of code as no need for data munging as correctly input directly into excel file from looking at statistical abstract in library or the pdf version on my computer...!
 
-just a small background into gganimate!
+## Postwar Japan and the Korean War
+Under American occupation, Japan was barely surviving on subsidies and US aid as the Supreme Commander of the Allied Powers (SCAP) restricted Japan's foreign trade and international transactions. The main goal, initially, was to cripple the Japanese economy (especially in terms of its heavy industries) so that it could never produce military goods again (Ohno, 2005). Some of the reforms initiated by SCAP include the breaking up of the __zaibatsu__ (family-owned mega-conglomerates that had a large role in Japanese war industries), new labor laws, land reform, and the well-known Constitutional reforms (the renunciation of the Emperor as a God and Article 9 which renounced war).  
+
+In 1948, President Truman asked Joseph Dodge for help in reconstructing Japan's economy due to his successes in rebuilding Germany amidst the looming threat of Communism in Asia with Mao's forces inching closer to total victory over the Kuomintang. Introducing austerity measures and setting a advantageous exchange rate for Japan among other policies which helped combat inflation, Dodge nevertheless caused severe adverse economic shocks and economic output tanked. Fortunately, Japan's saving grace came with the start of the Korean War in 1950.
+
+With high external demand leading to an export boom, Japan's recession ended quickly and the economy boomed as industrial output increased by more than 50% between 1950 and 1951, export values increased by 53%, and the total value of foreign trade increased by 84% (Dingman, 1993). This huge influx of dollars provided the investment needed for many different sectors of the Japanese economy to modernize their means of production (Dingman, 1993). 
+
+## Shifts in American policy regarding the Japanese economy
+
+
+
+## Steel industry
+- overview
+- show static
+```{r packages}
+library(dplyr) # pipes
+library(readr)
+
+library(ggplot2)
+library(ggthemes)
+library(scales)
+
+
+Japan_Steel <- read_csv("Data/JapanSteelProduction(1950-1960).csv",
+                      col_names = c("Year", "Steel_Production"),
+                      skip = 1)
+
+
+glimpse(Japan_Steel)
+
+```
+
+```{r steel static}
+
+Japan_Steel %>% 
+  ggplot(aes(x = Year, y = Steel_Production)) + 
+  geom_line(size = 2.5, color = "#474747") +
+  scale_x_continuous(breaks = pretty_breaks(n = 10)) +
+  scale_y_continuous(breaks = pretty_breaks(), label = comma) +
+  geom_vline(xintercept = 1950) +
+  geom_vline(xintercept = 1953) +
+  theme_economist_white() +
+  theme(axis.text = element_text(size = 10, color = "#474747"), 
+        axis.title = element_text(size = 15, color = "#474747"),
+        plot.title = element_text(hjust = 0.5, color = "#474747")) +
+  labs(x = "Year", y = "Steel Production (Units)", 
+       title = "Japan Steel Production\n(1950-1960)",
+       caption = "Source: Statistical Abstract of the United States 1962, pp. 925") 
+
+```
+
+
+## just a small background into gganimate!
 LINKS:
 VIDEOS: DR at plotcon
 
-data musings:
+- show gganimated
+```{r steel animated}
+library(gganimate)
+
+steel_animate <- steelprod %>% 
+  ggplot(aes(x = Year, y = Steel.production, frame = Year, cumulative = TRUE)) + 
+  geom_line(size = 2.5) +
+  theme_economist_white() +
+  theme(axis.text = element_text(size = 10), axis.title = element_text(size = 15),
+        plot.title = element_text(hjust = 0.5)) +
+  scale_x_continuous(breaks = pretty_breaks(n = 10)) +
+  scale_y_continuous(breaks = pretty_breaks(n = 10), label = comma) +
+  labs(x = "Year", y = "Steel Production (Units)", 
+       title = "Japan Steel Production") 
+
+gganimate(steel_animate)
+```
+
+
+## Camera industry
+- overview
+- show static
+```{r camera static}
+
+Japan_Camera <- read_csv("Data/JapanCamera&USAImportCamera(1945-1960).csv",
+                         col_names = c("Year", "Camera_Production", "USA_Imports"),
+                         skip = 1)
+
+Japan_Camera %>% 
+  ggplot(aes(x = Year, y = Camera_Production)) + 
+  geom_path(aes(y = Camera_Production, color = "Camera Production"), size = 1.5) +
+  geom_path(aes(y = USA_Imports, color = "USA Imports"), size = 1.5) +
+  scale_x_continuous(breaks = pretty_breaks(n = 20)) + 
+  scale_y_continuous(labels = c("0", "500,000", "1 Million", "1.5 Million", "2 Million")) +
+  scale_color_manual(values = c("Camera Production" = "#474747", 
+                                "USA Imports" = "black")) +
+  geom_vline(xintercept = 1953) +
+  geom_text()
+  theme_bw() +
+  theme(axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8), 
+        title = element_text(size = 9.5),
+        plot.title = element_text(hjust = 0.5),
+        legend.position = c(0.25, 0.8),
+        legend.title = element_blank()) +
+  labs(x = "Year", y = "Japanese Cameras (Units)", 
+       title = "Japanese Camera Production and USA Imports of Japanese Cameras\n (1945-1960)")
+
+```
+
+- show gganimated
+```{r camera animated}
+
+camera_animate <- Japan_Camera %>% 
+  ggplot(aes(x = Year, y = Camera_Production, frame = Year, cumulative = TRUE)) + 
+  geom_path(aes(y = Camera_Production), color = "#474747", size = 1.5) +
+  geom_path(aes(y = USA_Imports), color = "black", size = 1.5) +
+  scale_x_continuous(breaks = pretty_breaks(n = 20)) + 
+  scale_y_continuous(labels = c("0", "500,000", "1 Million", "1.5 Million", "2 Million")) +
+  theme_bw() +
+  theme(axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8), 
+        title = element_text(size = 9.5),
+        plot.title = element_text(hjust = 0.5)) +
+  labs(x = "Year", y = "Japanese Cameras (Units)", 
+       title = "Japanese Camera Production and USA Imports of Japanese Cameras\n (1945-1960)")
+
+gganimate(camera_animate)
+
+```
+
+## Cotton textiles industry
+- overview
+- show static
+```{r textiles static}
+
+```
+
+- show gganimated
+```{r textiles animated}
+
+```
+
+## Comparison with original excel graphs
+- []()
+- []()
+- []()
+
+## Conclusion
+- summary of research
+
+- data musings:
 
 doing research oldschool, pouring through US statistcal abstracts in the library and
 finding the right pdf files >>> inputting them by hand into excel files....

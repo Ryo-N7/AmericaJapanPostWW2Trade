@@ -4,16 +4,22 @@ library(tidyverse)
 library(ggthemes)
 library(scales)
 
-steelprod <- read.csv("~/R_materials/AmericaJapanPostWW2Trade/Data/JapanSteelProduction(1950-1960).csv")
-steelprod
+Japan_Steel <- read_csv("Data/JapanSteelProduction(1950-1960).csv",
+                      col_names = c("Year", "Steel_Production"),
+                      skip = 1)
 
-steelprod %>% ggplot(aes(x = Year, y = Steel.production)) + 
-  geom_line(size = 2.5) +
-  theme_economist_white() +
-  theme(axis.text = element_text(size = 10), axis.title = element_text(size = 15),
-        plot.title = element_text(hjust = 0.5)) +
+
+glimpse(Japan_Steel)
+
+Japan_Steel %>% 
+  ggplot(aes(x = Year, y = Steel_Production)) + 
+  geom_line(size = 2.5, color = "#474747") +
   scale_x_continuous(breaks = pretty_breaks(n = 10)) +
   scale_y_continuous(breaks = pretty_breaks(n = 10), label = comma) +
+  theme_economist_white() +
+  theme(axis.text = element_text(size = 10, color = "#474747"), 
+        axis.title = element_text(size = 15, color = "#474747"),
+        plot.title = element_text(hjust = 0.5, color = "#474747")) +
   labs(x = "Year", y = "Steel Production (Units)", 
        title = "Japan Steel Production\n(1950-1960)") 
 
@@ -37,13 +43,22 @@ gganimate(steel_animate)
 
 
 
-#
+# Camera 
 
 
-JapanCamera <- read.csv("~/R_materials/AmericaJapanPostWW2Trade/Data/JapanCamera&USAImportCamera(1945-1960).csv")
-JapanCamera
+JapanCamera <- read.csv("Data/JapanCamera&USAImportCamera(1945-1960).csv")
 
-JapanCamera %>% ggplot(aes(x = Year, y = value, group = variable)) + geom_line()
+Japan_Camera <- read_csv("Data/JapanCamera&USAImportCamera(1945-1960).csv",
+                         col_names = c("Year", "Camera_Production", "USA_Imports"),
+                         skip = 1)
+
+glimpse(Japan_Camera)
+
+glimpse(JapanCamera)
+
+Japan_Camera %>% 
+  ggplot(aes(x = Year, y = Camera_Production)) + 
+  geom_line()
 
 JapanCamera %>% ggplot(aes(x = Year, y = Japanese.Camera.Production)) + 
   geom_line(size = 2) + 
@@ -87,7 +102,7 @@ gganimate(camera_animate)
 
 
 
-JapanCotton <- read.csv("~/R_materials/AmericaJapanPostWW2Trade/Data/JapanCottonTextileExports(1946-1960).csv")
+JapanCotton <- read.csv("Data/JapanCottonTextileExports(1946-1960).csv")
 
 JapanCotton
 
