@@ -49,7 +49,7 @@ The steel and coal industry was one of the first industries targeted to revitali
 (NOTE: I originally used data from Statistical Abstract of the United States (editions between 1950 and 1960), in process of writing this article I tried to find more data from before 1950 and came across the Historical Statistics of Japan (by the Japan Statistical Association) that has the crude steel production from 1948 to 2004. Although the Statistical Abstract data matched up well with the Japanese source I elected to recreate this graph from the Historical Statistics of Japan data instead.)
 
 ```{r packages steel static}
-library(magrittr) # pipes
+library(dplyr) # pipes
 library(readr)    # reading in .csv files
 
 library(ggplot2)  # plotting
@@ -57,24 +57,31 @@ library(ggthemes) # ggplot2 themes
 library(scales)   # ggplot2 scaling options
 
 
-Japan_Steel <- read_csv("Data/JapanSteelProduction(1950-1960).csv",
-                      col_names = c("Year", "Steel_Production"),
-                      skip = 1)
+Japan_Steel <- readxl::read_xls("Data/iron_steel_production_1948-2004.xls",
+                             skip = 7,
+                             col_names = c("J_Year", "Year", "Pig_iron", 
+                                           "Ferro-alloys", "Crude_steel",
+                                           "Hot_steel_products", "Galvanized_sheets")) %>% 
+  select(Year, Crude_steel) %>% 
+  filter(Year <= 1960)
 
 Japan_Steel %>% 
-  ggplot(aes(x = Year, y = Steel_Production)) + 
+  ggplot(aes(x = Year, y = Crude_steel)) + 
   geom_line(size = 2.5, color = "#474747") +
   scale_x_continuous(breaks = pretty_breaks(n = 10)) +
   scale_y_continuous(breaks = pretty_breaks(), labels = comma, limits = c(0, 26000)) +
   geom_vline(xintercept = 1950) +
   geom_vline(xintercept = 1953) +
+  annotate(geom = "text",
+           label = "Korean\nWar", size = 5, color = "#474747",
+           x = 1951.55, y = 17500) +
   theme_economist_white() +
   theme(axis.text = element_text(size = 10, color = "#474747"), 
         axis.title = element_text(size = 15, color = "#474747"),
         plot.title = element_text(hjust = 0.5, color = "#474747")) +
-  labs(x = "Year", y = "Steel Production (Units)", 
+  labs(x = "Year", y = "Steel Production (Thousands of tons)", 
        title = "Japan Steel Production\n(1950-1960)",
-       caption = "Source: Statistical Abstract of the United States 1962, pp. 925") 
+       caption = "Source: Historical Statistics of Japan, 2012") 
 
 ```
 
@@ -87,23 +94,30 @@ VIDEOS: DR at plotcon
 ```{r steel animated}
 library(gganimate)
 
-steel_animate <- steelprod %>% 
-  ggplot(aes(x = Year, y = Steel.production, frame = Year, cumulative = TRUE)) + 
-  geom_line(size = 2.5) +
-  theme_economist_white() +
-  theme(axis.text = element_text(size = 10), axis.title = element_text(size = 15),
-        plot.title = element_text(hjust = 0.5)) +
+steel_animate <- Japan_Steel %>% 
+  ggplot(aes(x = Year, y = Crude_steel, frame = Year, cumulative = TRUE)) + 
+  geom_line(size = 2.5, color = "#474747") +
   scale_x_continuous(breaks = pretty_breaks(n = 10)) +
-  scale_y_continuous(breaks = pretty_breaks(n = 10), label = comma) +
-  labs(x = "Year", y = "Steel Production (Units)", 
-       title = "Japan Steel Production") 
+  scale_y_continuous(breaks = pretty_breaks(), labels = comma, limits = c(0, 26000)) +
+  geom_vline(xintercept = 1950) +
+  geom_vline(xintercept = 1953) +
+  annotate(geom = "text",
+           label = "Korean\nWar", size = 5, color = "#474747",
+           x = 1951.55, y = 17500) +
+  theme_economist_white() +
+  theme(axis.text = element_text(size = 10, color = "#474747"), 
+        axis.title = element_text(size = 15, color = "#474747"),
+        plot.title = element_text(hjust = 0.5, color = "#474747")) +
+  labs(x = "Year", y = "Steel Production (Thousands of tons)", 
+       title = "Japan Steel Production\n(1950-1960)",
+       caption = "Source: Historical Statistics of Japan, 2012") 
 
 gganimate(steel_animate)
+
 ```
 
 
 ## Camera industry
-- overview
 
 The camera industry had a quick recovery as the camera companies were one of the earliest to receive permits to resume production by SCAP in early 1946 and Japan already had all the raw materials needed for production (Nelson, 1998). The American military post exchanges (PX) throughout the Korean and Vietnam Wars allowed for large influx in dollars for Japan through camera and lens sales due to demand from American soldiers and also allowed Japanese camera products (most notably familiar companies such as Nikon and Canon) to enter the American market through its popularity among the returning American personnel (Nelson, 1998). By the 1970s, when American policies shifted regarding Japan's favorable exchange rate, it did not matter as Japan no longer needed to rely solely on the US market as it had in its postwar infancy (Nelson, 1998). 
 
