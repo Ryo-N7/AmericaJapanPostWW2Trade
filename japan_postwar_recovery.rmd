@@ -11,20 +11,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Exploring Japan's Postwar Economic Miracle with ggplot2 & gganimate!
 
-In this blogpost I weave in a gganimate and tweenr tutorial while exploring the American policies that aided Japan's postwar economic miracle!
+In this blogpost I weave in a gganimate and tweenr tutorial while exploring the American policies that aided Japan's postwar economic miracle! Back in college, I wrote a paper on the this subject for my United States Economic History class. We were supposed to include a few tables and graphs each in our paper and, as this was before I learned about R in my Econometrics class a year later, everything was stored and created in Excel. A year ago I went back and recreated the graphs using ggplot2 for some easy practice and now I'm going another level higher by implementing `gganimate` and `tweenr` into my plots!
 
-US economic history class:
-originally created the graphs for this research paper with excel
-
-prior to discovering R in senior year econometrics
-
-a year ago i went back and recreated the graphs using ggplot2 for some easy practice as i was still getting used to using R
-
-now i am going a small step above by implementing gganimate into my code!
-
-small article >>> outline paper 
-
-not a lot of code as no need for data munging as correctly input directly into excel file from looking at statistical abstract in library or the pdf version on my computer...!
+There won't be a lot of code as other posts as I didn't have to do much data munging for this mini-project. I tried to summarize/shorten the gist of my paper but even then, if you don't like history and just want to see how to do the animations, go ahead but you'll be missing a lot of the context!
 
 ## Postwar Japan and the Korean War
 Under American occupation, Japan was barely surviving on subsidies and US aid as the Supreme Commander of the Allied Powers (SCAP) restricted Japan's foreign trade and international transactions. The main goal, initially, was to cripple the Japanese economy (especially in terms of its heavy industries) so that it could never produce military goods again (Ohno, 2005). Some of the reforms initiated by SCAP include the breaking up of the __zaibatsu__ (family-owned mega-conglomerates that had a large role in Japanese war industries), new labor laws, land reform, and the well-known Constitutional reforms (the renunciation of the Emperor as a God and Article 9 which renounced war).  
@@ -159,6 +148,31 @@ Japan_Camera %>%
 
 ```{r camera animated}
 
+library(tweenr)
+
+glimpse(Japan_Camera)
+
+Japan_Camera_tween <- Japan_Camera %>% 
+  rename(y = Camera_Production, time = Year) %>% 
+  mutate(id = time, 
+         x = time,
+         ease = "linear") %>% 
+  select(x, y, time, id)
+
+glimpse(Japan_Camera_tween)
+
+Japan_cam_tween <- tween_elements(Japan_Camera_tween, "time", "id", "ease", nframes = 300)
+
+glimpse(Japan_cam_tween)
+
+
+```
+
+
+
+
+```{r}
+
 camera_animate <- Japan_Camera %>% 
   ggplot(aes(x = Year, y = Camera_Production, frame = Year, cumulative = TRUE)) + 
   geom_path(aes(y = Camera_Production), color = "#474747", size = 1.5) +
@@ -190,10 +204,19 @@ As a result, by 1951, Japan had become the largest exporter of cotton textiles i
 
 - show static
 ```{r textiles static}
+Japan_Textiles <- read_csv("Data/JapanCottonTextileExports(1946-1960).csv",
+                           col_names = c("Year", "total_exports", "exports_to_USA", "percentage_exports_USA"),
+                           skip = 1)
+
 
 ```
 
 - show gganimated
+
+shiny app?
+plotly?
+
+
 ```{r textiles animated}
 
 ```
