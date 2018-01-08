@@ -29,7 +29,6 @@ From around 1947 there was a profound shift away from the initial American polic
 SCAP and MacArthur refused to cooperate as they believed the __zaibatsu__ were militarists and a fundamental change of the Japanese economic system was needed. However, in the summer of 1948, MacArthur acquiesced and the reform only broke up 19 of the 324 planned firms while banks were exempted altogether (Schonberger, 1982). Other factors tied into this such as the traditionally strong Japanese legal support for __zaibatsu__ and the lobbying to Congress by American corporations with ties to these Japanese companies. As a result most __zaibatsu__ were modified into __keiretsu__ (bank-centered, industrial conglomerates) and American foreign grants/credits to Japan declined sharply by 1953 (Statistical Abstract of the United States 1954, pp. 902; Statistical Abstract of the United States 1960, pp. 906). 
 
 ## Steel industry
-- overview
 
 The steel and coal industry was one of the first industries targeted to revitalize the economy as both the Japanese government and SCAP recognized them as a valuable input for other industries (Elbaum, 2007; Fletcher, 2006). Coal was Japan's only domestically available resource and it was believed that increased coal output would lead to increased steel manufacturing, leading to increased allocation of steel for coal production, presenting a positive feedback loop for the economy. With the profits from the Korean War through US military procurement reinvested throughout the '50s, the steel industry contributed heavily to overall productivity gain and steel production rose up and above pre-war levels (Ohno, 2006). 
 
@@ -74,11 +73,13 @@ Japan_Steel %>%
 
 ```
 
-## just a small background into gganimate!
-LINKS:
-VIDEOS: DR at plotcon
+## Introducing `gganimate`!
 
-- show gganimated
+The idea behind gganimate is simple, as the name implies the animation part of a plot becomes just another aesthetic within the `ggplot` concept. This package is dependent on [ImageMagick](https://www.imagemagick.org/script/download.php) and FFmpeg to save your plots as GIFs or videos so make sure you have those installed as well. Once all that's done, go into the `ggplot()` code you previously made and it's just as simple as adding in `frame = ____ ` (whatever the variable you want to create an individual frame out of). You can also include `cumulative = TRUE` if you want to keep previous frames of added data on the plot as you change to the next frames. 
+
+For other tutorials take a look at gganimate's [Github repo](https://github.com/dgrtwo/gganimate) for a short tutorial or take a look at Peter Aldhous' lecture notes on [Iteration & Animation (with ggplot2)](http://paldhous.github.io/ucb/2016/dataviz/week14.html).
+
+If you're more of a video person or just want something to watch while grabbing some lunch here is David Robinson talking about gganimate at [Plotcon 2016](https://www.youtube.com/watch?v=9Y7Y1s4-VdA&t=1549s).
 
 ```{r steel animated}
 library(gganimate)
@@ -105,12 +106,10 @@ gganimate(steel_animate)
 
 ```
 
-
 ## Camera industry
 
 The camera industry had a quick recovery as the camera companies were one of the earliest to receive permits to resume production by SCAP in early 1946 and Japan already had all the raw materials needed for production (Nelson, 1998). The American military post exchanges (PX) throughout the Korean and Vietnam Wars allowed for large influx in dollars for Japan through camera and lens sales due to demand from American soldiers and also allowed Japanese camera products (most notably familiar companies such as Nikon and Canon) to enter the American market through its popularity among the returning American personnel (Nelson, 1998). By the 1970s, when American policies shifted regarding Japan's favorable exchange rate, it did not matter as Japan no longer needed to rely solely on the US market as it had in its postwar infancy (Nelson, 1998). 
 
-- show static
 ```{r camera static}
 
 Japan_Camera <- read_csv("Data/JapanCamera&USAImportCamera(1945-1960).csv",
@@ -215,7 +214,7 @@ Japan_Textiles <- read_csv("Data/JapanCottonTextileExports(1946-1960).csv",
 
 shiny app?
 plotly?
-
+highcharter?
 
 ```{r textiles animated}
 
@@ -231,19 +230,12 @@ plotly?
 
 Despite the devastation of the Allied bombing campaigns and the initial SCAP policies, the growing tensions of the Cold War and the postwar needs of America became the catalyst for a dramatic heel-turn in economic policy that laid the foundations for a miraculous Japanese recovery. By studying the causes and impacts of external/internal events and policies  we can gain clues to tackle the future challenges in rebuilding economies in other war-devastated areas of the world. 
 
+It was quite nice to go back through some old research and look for more/better data sources as I feel like the volume of data available is __always__ growing ... 
 
+When I was flipping through the actual copies of The Statistical Abstract of the United States in the library back in college while having other editions in PDF format on my laptop it really gave me a sense of wonder in how far we've come in gathering and storing data...
 
-- data musings:
-
-doing research old school, pouring through US statistical abstracts in the library and
-finding the right pdf files >>> inputting them by hand into excel files....
-
-- https://www.census.gov/library/publications/1951/compendia/1951statab.html
-- https://www.census.gov/library/publications/time-series/statistical_abstracts.html
-served to remind me of how fortunate i am of living in this day and age where (nearly) any data can be found with a few google/wikipedia searches!
-
-
-
-
+...
+...
+...
 
 
