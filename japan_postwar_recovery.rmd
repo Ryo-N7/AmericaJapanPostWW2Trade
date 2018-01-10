@@ -84,7 +84,7 @@ If you're more of a video person or just want something to watch while grabbing 
 ```{r steel animated}
 library(gganimate)
 
-steel_animate <- Japan_Steel %>% 
+Steel_Animate <- Japan_Steel %>% 
   ggplot(aes(x = Year, y = Crude_steel, frame = Year, cumulative = TRUE)) + 
   geom_line(size = 2.5, color = "#474747") +
   scale_x_continuous(breaks = pretty_breaks(n = 10)) +
@@ -102,7 +102,7 @@ steel_animate <- Japan_Steel %>%
        title = "Japan Steel Production\n(1950-1960)",
        caption = "Source: Historical Statistics of Japan, 2012") 
 
-gganimate(steel_animate)
+gganimate(Steel_Animate)
 
 ```
 
@@ -141,54 +141,110 @@ Japan_Camera %>%
 
 ```
 
-- show gganimated
 - explain tweenR
 
+[tweenr](https://github.com/thomasp85/tweenr) is a package created by Thomas Pedersen which allows you to interpolate your data between different states and although like in this example, it is highly complementary with `gganiamte`, it can be used in many other cases as well! 
 
-```{r camera animated}
-
-library(tweenr)
-
-glimpse(Japan_Camera)
-
-Japan_Camera_tween <- Japan_Camera %>% 
-  rename(y = Camera_Production, time = Year) %>% 
-  mutate(id = time, 
-         x = time,
-         ease = "linear") %>% 
-  select(x, y, time, id)
-
-glimpse(Japan_Camera_tween)
-
-Japan_cam_tween <- tween_elements(Japan_Camera_tween, "time", "id", "ease", nframes = 300)
-
-glimpse(Japan_cam_tween)
-
-
-```
-
-
-
+To show you how this interpolation works, I manually created a small example. Let's say you have a dataset like this:
 
 ```{r}
+tribble(
+  ~year, ~num,
+  1950, 56,
+  1951, 59,
+  1952, 64,
+  1953, 67,
+  1954, 69,
+  1955, 74,
+  1956, 78,
+  1957, 83
+)
+```
 
-camera_animate <- Japan_Camera %>% 
-  ggplot(aes(x = Year, y = Camera_Production, frame = Year, cumulative = TRUE)) + 
-  geom_path(aes(y = Camera_Production), color = "#474747", size = 1.5) +
-  geom_path(aes(y = USA_Imports), color = "black", size = 1.5) +
-  scale_x_continuous(breaks = pretty_breaks(n = 20)) + 
-  scale_y_continuous(labels = c("0", "500,000", "1 Million", "1.5 Million", "2 Million")) +
-  theme_bw() +
-  theme(axis.title = element_text(size = 10),
-        axis.text = element_text(size = 8), 
-        title = element_text(size = 9.5),
-        plot.title = element_text(hjust = 0.5)) +
-  labs(x = "Year", y = "Japanese Cameras (Units)", 
-       title = "Japanese Camera Production and USA Imports of Japanese Cameras\n (1945-1960)")
+So in a time series plot, as in the steel production plot it will transition a bit awkwardly from point to point. This is where interpolation can help! By creating a lot of smaller data points in between the main data points you can create something like this:
 
-gganimate(camera_animate)
+```{r}
+tribble(
+  ~year, ~num,
+  1950.0, 56.0,
+  1950.1, 56.3,
+  1950.2, 56.6,
+  1950.3, 56.9,
+  1950.4, 57.2,
+  1950.5, 57.5,
+  1950.6, 57.8,
+  1950.7, 58.1,
+  1950.8, 58.4,
+  1950.9, 58.7,
+  1951.0, 59.0
+)
+```
+
+(only showing between 1950 and 1951 to save space...) Therefore, making the transitions in a time series animation appear "smoother"!
+
+Here we use `map()` to create a list of dataframes containing 
+
+```{r camera df list}
+library(purrr)
+
+Camera_List <- map(seq(nrow(Japan_Camera)), 
+                   ~Japan_Camera[c(seq(.x), rep(.x, nrow(Japan_Camera) - .x)), ])
+
+str(Camera_List, list.len = 3)
 
 ```
+
+Now that we have the list of dataframes ready we can use the `tween_states()` function to specify how the transitions between the "states" of our data are created. Each "state" will be the individual dataframes that we just created! `tweenlength` is length of the transitions between state to state, `statelength` is the pause at each state, `ease` is the function used for the transitions, and `nframes` is the number of frames to generate for the animation.
+
+```{r camera tween}
+library(tweenr)
+
+Camera_Tween <- Camera_List %>% 
+    tween_states(tweenlength = 5, statelength = 2, ease = 'cubic-in-out', nframes = 100) 
+
+glimpse(Camera_Tween)
+
+```
+
+Now from the original 16 rows/observations we now have 1712 rows due to creating the interpolating frames! The `tween_states()` function has added a `.frame` variable that corresponds with the expanded data set. 
+
+After saving everything as a ggplot object, we can use the `ani.options()` function to specify a variety of animation options, here we speed up the time interval between frames. Then, as before, we can gganimate and **Voila**!
+
+```{r camera animate}
+
+Camera_Animate <- Camera_Tween %>% 
+    ggplot(aes(x = Year, y = Camera_Production, frame = .frame)) + 
+    geom_path(aes(y = Camera_Production, 
+                  color = "Camera Production", frame = .frame), size = 1.5) +
+    geom_path(aes(y = USA_Imports, 
+                  color = "USA Imports", frame = .frame), size = 1.5) +
+    scale_x_continuous(breaks = pretty_breaks(n = 20)) + 
+    scale_y_continuous(labels = c("0", "500,000", "1 Million", "1.5 Million", "2 Million")) +
+    scale_color_manual(values = c("Camera Production" = "#474747", 
+                                  "USA Imports" = "black")) +
+    geom_vline(xintercept = 1950) +
+    geom_vline(xintercept = 1953) +
+    annotate(geom = "text", 
+             label = "Korean\nWar", size = 5, color = "#474747",
+             x = 1951.5, y = 1000000) +
+    theme_bw() +
+    theme(axis.title = element_text(size = 10),
+          axis.text = element_text(size = 8), 
+          title = element_text(size = 9.5),
+          plot.title = element_text(hjust = 0.5),
+          legend.position = c(0.15, 0.9),
+          legend.title = element_blank()) +
+    labs(x = "Year", y = "Japanese Cameras (Units)", 
+         title = "Japanese Camera Production and USA Imports of Japanese Cameras\n (1945-1960)")
+
+
+animation::ani.options(interval = 0.05)   
+
+gganimate(Camera_Animate)
+
+```
+
+
 
 ## Cotton textiles industry
 - overview
