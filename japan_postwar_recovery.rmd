@@ -2,14 +2,17 @@
 title: "japan_postwar_recovery"
 author: "RN7"
 date: "January 3, 2018"
-output: html_document
+output: 
+  md_document:
+    variant: markdown_github
+always_allow_html: yes
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Exploring Japan's Postwar Economic Miracle with ggplot2 & gganimate!
+# Exploring Japan's Postwar Economic Miracle with ggplot2, gganimate, & highcharter!
 
 In this blog post I weave in a gganimate and tweenr tutorial while exploring the American policies that aided Japan's postwar economic miracle! Back in college, I wrote a paper on the this subject for my United States Economic History class. We were supposed to include a few tables and graphs each in our paper and, as this was before I learned about R in my Econometrics class a year later, everything was stored and created in Excel. More than a year ago I went back and recreated the graphs using ggplot2 for some easy practice and now I'm going another level higher by implementing `gganimate` and `tweenr` into my plots!
 
@@ -26,7 +29,6 @@ With high external demand leading to an export boom, Japan's recession ended qui
 ## Shifts in American policy regarding the Japanese economy
 
 From around 1947 there was a profound shift away from the initial American policies aimed at limiting Japanese heavy industry. While diplomats such as William R. Castle emphasized the rhetoric that Japan can serve as a capitalist bulwark against Soviet expansion into Asia, American policy makers preoccupied with postwar economic issues saw Japanese economic recovery as a solution to domestic problems (Schonberger, 1982). Gradually, politicians such as George Kennan (Policy Planning Staff in the State Department) and William Draper (Army Undersecretary) moved to dilute the impact of SCAP policies such as the _zaibatsu_ dissolution reform "FEC-230" (Schonberger, 1982). Their revision, modeled after the Marshall Plan, argued that a two year burst of aid appropriations would increase Japanese exports and thereby foreign exchange for imports of basic necessities and allow for the United States to stop sending aid by 1953 (Schonberger, 1982). 
-
 SCAP and MacArthur refused to cooperate as they believed the _zaibatsu_ were militarists and a fundamental change of the Japanese economic system was needed. However, in the summer of 1948, MacArthur acquiesced and the reform only broke up 19 of the 324 planned firms while banks were exempted altogether (Schonberger, 1982). Other factors tied into this such as the traditionally strong Japanese legal support for _zaibatsu_ and the lobbying to Congress by American corporations with ties to these Japanese companies. As a result most _zaibatsu_ were modified into _keiretsu_ (bank-centered, industrial conglomerates) and American foreign grants/credits to Japan declined sharply by 1953 (Statistical Abstract of the United States 1954, pp. 902; Statistical Abstract of the United States 1960, pp. 906). 
 
 ## Steel industry
@@ -82,7 +84,7 @@ For other tutorials take a look at gganimate's [Github repo](https://github.com/
 
 If you're more of a video person or just want something to watch while grabbing some lunch here is David Robinson talking about gganimate at [Plotcon 2016](https://www.youtube.com/watch?v=9Y7Y1s4-VdA&t=1549s).
 
-```{r steel animated}
+```{r steel animated, fig.show = "animate"}
 library(gganimate) # animations
 
 Steel_Animate <- Japan_Steel %>% 
@@ -196,7 +198,7 @@ library(purrr)
 Camera_List <- map(seq(nrow(Japan_Camera)), 
                    ~Japan_Camera[c(seq(.x), rep(.x, nrow(Japan_Camera) - .x)), ])
 
-str(Camera_List, list.len = 3)
+str(Camera_List, list.len = 4)
 
 ```
 
@@ -264,13 +266,18 @@ The American government also believed that this course of action would help reli
 
 As a result, by 1951, Japan had become the largest exporter of cotton textiles in the world with a large percentage of the approximately 2.9 billion square yards produced each year (1955-1970) going to the United States (Abe, 2005). As the domestic American textile market applied pressure to install export quotas, the share of Japanese textile exports fell from 72% in 1957 to a mere 20% in 1960. However, the entry of other Asian countries into the American market made these quotas against Japanese exports meaningless and the Japanese economy began to focus on other industries from the 1960s onward, most famously, the automobile industry.
 
+## Highcharter
+
+The `Highcharter` package by Joshua Kunst allows you to access the `Highcharts` JavaScript visualization library and can seamlessly fit into your workflow as it uses ` %>% ` to connect functions. For some examples check this [link](http://jkunst.com/highcharter/) out. To find out more about the myriad of options available to build your chart, check out the Highcharts API reference [here](https://api.highcharts.com/highcharts/). For the more advanced customizations you might need to know JS and/or HTML but Stack Overflow posts can help you out (tags: `highcharts` & `r-highcharter`)! Another great tutorial to learn `Highcharter` from is [here](http://paldhous.github.io/ucb/2016/dataviz/week13.html), another page out of Peter Aldhous' lecture notes!
+
+What I did here was to show across 2 different y-axes, the total amount of Japanese textile exports and the percentage of those exports heading to the USA. Instead of having them on one graph, I moved the axes labels to opposite sides and had each time series split up the y-axis space between them using the `hc_yAxis_multiples()` function. To make things easier to understand, I had the tooltip show the data for both time series using `hc_tooltip()` and customizing the labels for each series inside the tooltip with the `tooltip = ` argument inside `hc_add_series()` function.
+
+
 ```{r textiles static}
 Japan_Textiles <- read_csv("Data/JapanCottonTextileExports(1946-1960).csv",
                            col_names = c("Year", "total_exports", "exports_to_USA",
                                          "percentage_exports_USA"),
                            skip = 1)
-
-glimpse(Japan_Textiles)
 
 library(htmlwidgets)
 library(highcharter)
@@ -282,7 +289,7 @@ highchart() %>%
    hc_yAxis_multiples(
      list(top = "0%", height = "30%", lineWidth = 3, opposite = TRUE, 
           title = list(text = "% of Total Exports")),
-     list(top = "30%", height = "70%", offset = 0, 
+     list(top = "30%", height = "70%", 
           title = list(text = "Total Exports (Millions sq. yards)"))
    ) %>% 
    hc_xAxis(title = list(text = "Year"), 
@@ -300,17 +307,12 @@ highchart() %>%
               borderColor = "black",
               headerFormat = '<span style = "font-size: 14px"><b>{point.key}</b></span><br/>'
               ) %>% 
-   hc_title(text = "Japan's Exports of Cotton Textiles")
+   hc_title(text = "Japan's Exports of Cotton Textiles (1946-1960)")
    
 
 ```
 
-
-highcharter?
-
-```{r textiles animated}
-
-```
+You can even export what you've made as a standalone web page using the `saveWidget()` function from the `htmlwidgets` package!
 
 ## Conclusion
 

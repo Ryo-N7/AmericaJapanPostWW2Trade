@@ -44,13 +44,50 @@ gganimate(steel_animate)
 
 
 # Camera 
-
+library(tidyverse)
+library(gganimate)
+library(tweenr)
 
 JapanCamera <- read.csv("Data/JapanCamera&USAImportCamera(1945-1960).csv")
 
 Japan_Camera <- read_csv("Data/JapanCamera&USAImportCamera(1945-1960).csv",
                          col_names = c("Year", "Camera_Production", "USA_Imports"),
                          skip = 1)
+
+Cam_Ani <- Japan_Camera %>% 
+  split(.$Year) %>% 
+  tween_states(tweenlength = 3, statelength = 2, ease = 'linear', nframes = 200) %>% 
+  ggplot(aes(x = Year, y = Camera_Production, frame = .frame)) + 
+  geom_path(aes(y = Camera_Production, 
+                color = "Camera Production", frame = .frame), size = 1.5) +
+  geom_path(aes(y = USA_Imports, 
+                color = "USA Imports", frame = .frame), size = 1.5) +
+  scale_x_continuous(breaks = pretty_breaks(n = 20)) + 
+  scale_y_continuous(labels = c("0", "500,000", "1 Million", "1.5 Million", "2 Million")) +
+  scale_color_manual(values = c("Camera Production" = "#474747", 
+                                "USA Imports" = "black")) +
+  geom_vline(xintercept = 1950) +
+  geom_vline(xintercept = 1953) +
+  annotate(geom = "text", 
+           label = "Korean\nWar", size = 5, color = "#474747",
+           x = 1951.5, y = 1000000) +
+  theme_bw() +
+  theme(axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8), 
+        title = element_text(size = 9.5),
+        plot.title = element_text(hjust = 0.5),
+        legend.position = c(0.15, 0.9),
+        legend.title = element_blank(),
+        panel.grid.minor.y = element_blank()) +
+  labs(x = "Year", y = "Japanese Cameras (Units)", 
+       title = "Japanese Camera Production and USA Imports of Japanese Cameras\n (1945-1960)", 
+       caption = "Source: Nelson, P.A. (1998). Rivalry and cooperation: \nHow the Japanese photography industry went global, pp. 14, 74.")
+
+
+animation::ani.options(interval = 0.05)   
+
+gganimate(Cam_Ani)
+
 
 glimpse(Japan_Camera)
 
