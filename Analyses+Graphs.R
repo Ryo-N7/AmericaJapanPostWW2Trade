@@ -329,6 +329,21 @@ str(data)
 
 
 
+nrow(Japan_Camera)
+seq(nrow(Japan_Camera))
+Japan_Camera[16, ]
+Japan_Camera[3, 2]
+Japan_Camera[3, rep(3, nrow(Japan_Camera) - 3)]
+glimpse(Japan_Camera)
+Japan_Camera[2, rep(2, nrow(Japan_Camera) - 2)]
+
+Japan_Camera[c(seq(10)), rep(3, nrow(Japan_Camera) - 10)]
+Japan_Camera[c(seq(10)), rep(1, nrow(Japan_Camera) - 10)]
+Japan_Camera[c(seq(9)), rep(2, nrow(Japan_Camera) - 9)]
+Japan_Camera[c(seq(5)), rep(2, nrow(Japan_Camera) - 5)]
+
+rep(15, nrow(Japan_Camera)-15)
+rep(4, nrow(Japan_Camera)-4)
 
 
 

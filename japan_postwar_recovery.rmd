@@ -11,22 +11,23 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Exploring Japan's Postwar Economic Miracle with ggplot2 & gganimate!
 
-In this blogpost I weave in a gganimate and tweenr tutorial while exploring the American policies that aided Japan's postwar economic miracle! Back in college, I wrote a paper on the this subject for my United States Economic History class. We were supposed to include a few tables and graphs each in our paper and, as this was before I learned about R in my Econometrics class a year later, everything was stored and created in Excel. A year ago I went back and recreated the graphs using ggplot2 for some easy practice and now I'm going another level higher by implementing `gganimate` and `tweenr` into my plots!
+In this blog post I weave in a gganimate and tweenr tutorial while exploring the American policies that aided Japan's postwar economic miracle! Back in college, I wrote a paper on the this subject for my United States Economic History class. We were supposed to include a few tables and graphs each in our paper and, as this was before I learned about R in my Econometrics class a year later, everything was stored and created in Excel. More than a year ago I went back and recreated the graphs using ggplot2 for some easy practice and now I'm going another level higher by implementing `gganimate` and `tweenr` into my plots!
 
-There won't be a lot of code as other posts as I didn't have to do much data munging for this mini-project. I tried to summarize/shorten the gist of my paper but even then, if you don't like history and just want to see how to do the animations, go ahead but you'll be missing a lot of the context!
+There won't be a lot of code as other posts as I didn't have to do much data munging for this mini-project. I tried to summarize/shorten the gist of my paper but even then, if you don't like history and just want to see how to do the animations, go ahead but you'll be missing a lot of the context! I've included references and also some further reading at the end as my original (undergraduate) paper is by no means a comprehensive survey of the economic and political upheaval in the postwar period (especially as my focus was on the American policies).
 
 ## Postwar Japan and the Korean War
-Under American occupation, Japan was barely surviving on subsidies and US aid as the Supreme Commander of the Allied Powers (SCAP) restricted Japan's foreign trade and international transactions. The main goal, initially, was to cripple the Japanese economy (especially in terms of its heavy industries) so that it could never produce military goods again (Ohno, 2005). Some of the reforms initiated by SCAP include the breaking up of the __zaibatsu__ (family-owned mega-conglomerates that had a large role in Japanese war industries), new labor laws, land reform, and the well-known Constitutional reforms (the renunciation of the Emperor as a God and Article 9 which renounced war).  
 
-In 1948, President Truman asked Joseph Dodge for help in reconstructing Japan's economy due to his successes in rebuilding Germany midst the looming threat of Communism in Asia with Mao's forces inching closer to total victory over the Kuomintang. Introducing austerity measures and setting a advantageous exchange rate for Japan among other policies which helped combat inflation, Dodge nevertheless caused severe adverse economic shocks and economic output tanked. Fortunately, Japan's saving grace came with the start of the Korean War in 1950.
+Under American occupation, Japan was barely surviving on subsidies and US aid as the Supreme Commander of the Allied Powers (SCAP) restricted Japan's foreign trade and international transactions. The main goal, initially, was to cripple the Japanese economy (especially in terms of its heavy industries) so that it could never produce military goods again (Ohno, 2005). Some of the reforms initiated by SCAP include the breaking up of the __zaibatsu__ (family-owned mega-conglomerates that had a large role in Japanese war industries), new labor laws, land reform, and the well-known political reforms (the renunciation of the Emperor as a God and Article 9 in the new constitution, which renounced war).  
+
+In 1948, President Truman asked Joseph Dodge for help in reconstructing Japan's economy due to his successes in rebuilding Germany midst the looming threat of Communism in Asia with Mao's forces inching closer to total victory over the Kuomintang (Nakamura & Odaka, 2003). Introducing austerity measures and setting a advantageous exchange rate for Japan among other policies which helped combat inflation, Dodge nevertheless caused severe adverse economic shocks and economic output tanked (Ohno, 2005). Fortunately, Japan's saving grace came with the start of the Korean War in 1950.
 
 With high external demand leading to an export boom, Japan's recession ended quickly and the economy boomed as industrial output increased by more than 50% between 1950 and 1951, export values increased by 53%, and the total value of foreign trade increased by 84% (Dingman, 1993). This huge influx of dollars provided the investment needed for many different sectors of the Japanese economy to modernize their means of production (Dingman, 1993). 
 
 ## Shifts in American policy regarding the Japanese economy
 
-From around 1947 there was a profound shift away from the initial American policies aimed at limiting Japanese heavy industry. While diplomats such as William R. Castle emphasized the rhetoric that Japan can serve as a capitalist bulwark against Soviet expansion into Asia, American policy makers preoccupied with postwar economic issues saw Japanese economic recovery as a solution to domestic problems (Schonberger, 1982). Gradually, politicians such as George Kennan (Policy Planning Staff in the State Department) and William Draper (Army Undersecretary) moved to dilute the impact of SCAP policies such as the __zaibatsu__ dissolution reform "FEC-230" (Schonberger, 1982). Their revision, modelled after the Marshall Plan, argued that a two year burst of aid appropriations would increase Japanese exports and thereby foreign exchange for imports of basic necessities and allow for the United States to stop sending aid by 1953 (Schonberger, 1982). 
+From around 1947 there was a profound shift away from the initial American policies aimed at limiting Japanese heavy industry. While diplomats such as William R. Castle emphasized the rhetoric that Japan can serve as a capitalist bulwark against Soviet expansion into Asia, American policy makers preoccupied with postwar economic issues saw Japanese economic recovery as a solution to domestic problems (Schonberger, 1982). Gradually, politicians such as George Kennan (Policy Planning Staff in the State Department) and William Draper (Army Undersecretary) moved to dilute the impact of SCAP policies such as the _zaibatsu_ dissolution reform "FEC-230" (Schonberger, 1982). Their revision, modeled after the Marshall Plan, argued that a two year burst of aid appropriations would increase Japanese exports and thereby foreign exchange for imports of basic necessities and allow for the United States to stop sending aid by 1953 (Schonberger, 1982). 
 
-SCAP and MacArthur refused to cooperate as they believed the __zaibatsu__ were militarists and a fundamental change of the Japanese economic system was needed. However, in the summer of 1948, MacArthur acquiesced and the reform only broke up 19 of the 324 planned firms while banks were exempted altogether (Schonberger, 1982). Other factors tied into this such as the traditionally strong Japanese legal support for __zaibatsu__ and the lobbying to Congress by American corporations with ties to these Japanese companies. As a result most __zaibatsu__ were modified into __keiretsu__ (bank-centered, industrial conglomerates) and American foreign grants/credits to Japan declined sharply by 1953 (Statistical Abstract of the United States 1954, pp. 902; Statistical Abstract of the United States 1960, pp. 906). 
+SCAP and MacArthur refused to cooperate as they believed the _zaibatsu_ were militarists and a fundamental change of the Japanese economic system was needed. However, in the summer of 1948, MacArthur acquiesced and the reform only broke up 19 of the 324 planned firms while banks were exempted altogether (Schonberger, 1982). Other factors tied into this such as the traditionally strong Japanese legal support for _zaibatsu_ and the lobbying to Congress by American corporations with ties to these Japanese companies. As a result most _zaibatsu_ were modified into _keiretsu_ (bank-centered, industrial conglomerates) and American foreign grants/credits to Japan declined sharply by 1953 (Statistical Abstract of the United States 1954, pp. 902; Statistical Abstract of the United States 1960, pp. 906). 
 
 ## Steel industry
 
@@ -37,7 +38,7 @@ The steel and coal industry was one of the first industries targeted to revitali
 (NOTE: I originally used data from Statistical Abstract of the United States (editions between 1950 and 1960), in process of writing this article I tried to find more data from before 1950 and came across the Historical Statistics of Japan (by the Japan Statistical Association) that has the crude steel production from 1948 to 2004. Although the Statistical Abstract data matched up well with the Japanese source I elected to recreate this graph from the Historical Statistics of Japan data instead.)
 
 ```{r packages steel static}
-library(dplyr) # pipes
+library(dplyr)    # pipes and dplyr verbs
 library(readr)    # reading in .csv files
 
 library(ggplot2)  # plotting
@@ -82,7 +83,7 @@ For other tutorials take a look at gganimate's [Github repo](https://github.com/
 If you're more of a video person or just want something to watch while grabbing some lunch here is David Robinson talking about gganimate at [Plotcon 2016](https://www.youtube.com/watch?v=9Y7Y1s4-VdA&t=1549s).
 
 ```{r steel animated}
-library(gganimate)
+library(gganimate) # animations
 
 Steel_Animate <- Japan_Steel %>% 
   ggplot(aes(x = Year, y = Crude_steel, frame = Year, cumulative = TRUE)) + 
@@ -105,6 +106,8 @@ Steel_Animate <- Japan_Steel %>%
 gganimate(Steel_Animate)
 
 ```
+
+Looks great! However, the animation looks a bit jagged, but we'll look at ways to fix that in the next section!
 
 ## Camera industry
 
@@ -137,15 +140,14 @@ Japan_Camera %>%
         legend.position = c(0.15, 0.9),
         legend.title = element_blank()) +
   labs(x = "Year", y = "Japanese Cameras (Units)", 
-       title = "Japanese Camera Production and USA Imports of Japanese Cameras\n (1945-1960)")
+       title = "Japanese Camera Production and USA Imports of Japanese Cameras\n (1945-1960)",
+       caption = "Source: Nelson, P.A. (1998). Rivalry and cooperation: \nHow the Japanese photography industry went global, pp. 14, 74.")
 
 ```
 
-- explain tweenR
+## tweenR
 
-[tweenr](https://github.com/thomasp85/tweenr) is a package created by Thomas Pedersen which allows you to interpolate your data between different states and although like in this example, it is highly complementary with `gganiamte`, it can be used in many other cases as well! 
-
-To show you how this interpolation works, I manually created a small example. Let's say you have a dataset like this:
+To create smoother animations between data points we can use [tweenr](https://github.com/thomasp85/tweenr), a package created by Thomas Pedersen which allows you to interpolate your data between different states. Although like in this example, it is highly complementary with `gganimate`, it can be used in many other cases as well! To show you how this interpolation works, I manually created a small example. Let's say you have a data set like this:
 
 ```{r}
 tribble(
@@ -161,7 +163,7 @@ tribble(
 )
 ```
 
-So in a time series plot, as in the steel production plot it will transition a bit awkwardly from point to point. This is where interpolation can help! By creating a lot of smaller data points in between the main data points you can create something like this:
+So in a time series plot, as in the steel production plot, it will transition a bit awkwardly from point to point. This is where interpolation can help! By creating a lot of smaller data points in between the main data points you can create something like this:
 
 ```{r}
 tribble(
@@ -176,16 +178,20 @@ tribble(
   1950.7, 58.1,
   1950.8, 58.4,
   1950.9, 58.7,
-  1951.0, 59.0
+  1951.0, 59.0   # etc.
 )
 ```
 
 (only showing between 1950 and 1951 to save space...) Therefore, making the transitions in a time series animation appear "smoother"!
 
-Here we use `map()` to create a list of dataframes containing 
+I was having a bit of trouble creating the list of data frames necessary to provide as the input for the `tween_states()` function. I asked for help on R Studio Community and user **alistaire** replied with a great answer [here](https://community.rstudio.com/t/tweenr-gganimate-with-line-plot/4027). Below, I'll go through what he did step-by-step.
+
+First, we use `map()` to create a list of data frames containing the data for each row in `Japan_Camera` (16) with the same number of observations in `Japan_Camera`. However, the observations in each data frame (for the individual rows) that have not been displayed yet are replaced with the values for the previously displayed row. 
+
+As a result we have a list of 16 data frames (view shortened to the first 3 to save space). Look carefully at the slight changes in the `Camera_Production` column if you didn't understand the above explanation.
 
 ```{r camera df list}
-library(purrr)
+library(purrr) 
 
 Camera_List <- map(seq(nrow(Japan_Camera)), 
                    ~Japan_Camera[c(seq(.x), rep(.x, nrow(Japan_Camera) - .x)), ])
@@ -194,13 +200,13 @@ str(Camera_List, list.len = 3)
 
 ```
 
-Now that we have the list of dataframes ready we can use the `tween_states()` function to specify how the transitions between the "states" of our data are created. Each "state" will be the individual dataframes that we just created! `tweenlength` is length of the transitions between state to state, `statelength` is the pause at each state, `ease` is the function used for the transitions, and `nframes` is the number of frames to generate for the animation.
+Now that we have the list of data frames ready we can use the `tween_states()` function to specify how the transitions between the "states" of our data are created. Each "state" will be the individual data frames that we just created! `tweenlength` is length of the transitions between state to state, `statelength` is the pause at each state, `ease` is the function used for the transitions, and `nframes` is the number of frames to generate for the animation.
 
 ```{r camera tween}
 library(tweenr)
 
 Camera_Tween <- Camera_List %>% 
-    tween_states(tweenlength = 5, statelength = 2, ease = 'cubic-in-out', nframes = 100) 
+    tween_states(tweenlength = 3, statelength = 2, ease = 'linear', nframes = 200) 
 
 glimpse(Camera_Tween)
 
@@ -233,9 +239,11 @@ Camera_Animate <- Camera_Tween %>%
           title = element_text(size = 9.5),
           plot.title = element_text(hjust = 0.5),
           legend.position = c(0.15, 0.9),
-          legend.title = element_blank()) +
+          legend.title = element_blank(),
+          panel.grid.minor.y = element_blank()) +
     labs(x = "Year", y = "Japanese Cameras (Units)", 
-         title = "Japanese Camera Production and USA Imports of Japanese Cameras\n (1945-1960)")
+         title = "Japanese Camera Production and USA Imports of Japanese Cameras\n (1945-1960)", 
+         caption = "Source: Nelson, P.A. (1998). Rivalry and cooperation: \nHow the Japanese photography industry went global, pp. 14, 74.")
 
 
 animation::ani.options(interval = 0.05)   
@@ -247,51 +255,76 @@ gganimate(Camera_Animate)
 
 
 ## Cotton textiles industry
-- overview
 
 As a result of the loss of its overseas territories, Japan lost 2.75 million cotton spindles from China and Manchuria with a further 210,000 in Korea (Fletcher, 2006). With the United States' help, however, the cotton textiles industry became the leading export industry from 1946-1960 (taking up around 59% of the dollar value of all Japanese exports) which allowed for raw material and food imports into devastated Japan (Fletcher, 2006; Sugihara, 1999). 
 
-The United States pursued this initiative due to the accumulation of raw cotton by the Commodity Credit Corporations from various __New Deal__ policies dating back to the Great Depression; exporting this raw cotton to Japan would increase government revenue and raise cotton prices for the benefit of American producers (Fletcher, 2006; Abe, 2005).
+The United States pursued this initiative due to the accumulation of raw cotton by the Commodity Credit Corporations from various _New Deal_ policies dating back to the Great Depression; exporting this raw cotton to Japan would increase government revenue and raise cotton prices for the benefit of American producers (Fletcher, 2006; Abe, 2005).
 
 The American government also believed that this course of action would help relieve American taxpayer the burden of paying aid/subsidies for Japanese imports of basic necessities by allowing Japan to sustain itself through its textile exports as well as reinvest the dollars earned into other recovering industries (Abe, 2005; Fletcher, 2006). 
 
-As a result, by 1951, Japan had become the largest exporter of cotton textiles in the world with a large percentage of the approximately 2.9 billion square yards produced each year (1955-1970) going to the United States (Abe, 2005). As the domestic American textile market applied pressure to install export quotas, the share of Japanese textile exports fell from 72% in 1957 to a mere 20% in 1960. However, the entry of other Asian countries into the American market made these quotas against Japanese exports meaningless and the Japanese economy began to focus on other industries from the 1960s onwards, most famously, the automobile industry.
+As a result, by 1951, Japan had become the largest exporter of cotton textiles in the world with a large percentage of the approximately 2.9 billion square yards produced each year (1955-1970) going to the United States (Abe, 2005). As the domestic American textile market applied pressure to install export quotas, the share of Japanese textile exports fell from 72% in 1957 to a mere 20% in 1960. However, the entry of other Asian countries into the American market made these quotas against Japanese exports meaningless and the Japanese economy began to focus on other industries from the 1960s onward, most famously, the automobile industry.
 
-- show static
 ```{r textiles static}
 Japan_Textiles <- read_csv("Data/JapanCottonTextileExports(1946-1960).csv",
-                           col_names = c("Year", "total_exports", "exports_to_USA", "percentage_exports_USA"),
+                           col_names = c("Year", "total_exports", "exports_to_USA",
+                                         "percentage_exports_USA"),
                            skip = 1)
 
 
 ```
 
-- show gganimated
 
-shiny app?
-plotly?
 highcharter?
 
 ```{r textiles animated}
 
 ```
 
-## Comparison with original excel graphs
+## Conclusion
+
+Despite the devastation of the Allied bombing campaigns and the initial SCAP policies, the growing tensions of the Cold War and the postwar needs of America became the catalyst for a dramatic heel-turn in economic policy that laid the foundations for a miraculous Japanese recovery. By studying the causes and impacts of external/internal events and policies  we can gain clues to tackle the future challenges in rebuilding economies in other war-devastated areas of the world. 
+
+## Comparison with my original excel graphs
 - [Steel industry]()
 - [Camera industry]()
 - [Cotton textile industry]()
 
-## Conclusion
-- summary of research
+To finish off this blog post, just a few thoughts... Doing this mini-project, it was quite nice to go back through some old research and look for more/better data sources as the volume of data available is __always__ growing, with older research being digitized daily. Back when I was first doing this research paper, even with PDF versions available, I would usually grab a few actual copies of The Statistical Abstract of the United States from the shelves and flip through them as it really gave me a sense of wonder and I kind of felt the "weight" of history through those hefty volumes which is something that can't really be "felt" from digital sources unfortunately. 
 
-Despite the devastation of the Allied bombing campaigns and the initial SCAP policies, the growing tensions of the Cold War and the postwar needs of America became the catalyst for a dramatic heel-turn in economic policy that laid the foundations for a miraculous Japanese recovery. By studying the causes and impacts of external/internal events and policies  we can gain clues to tackle the future challenges in rebuilding economies in other war-devastated areas of the world. 
+References:
+* Abe, T. (2005). The restructuring of cotton spinning companies in postwar Japan. (Discussion paper). Graduate School of Economics and Osaka School of International Public Policy.
 
-It was quite nice to go back through some old research and look for more/better data sources as I feel like the volume of data available is __always__ growing ... 
+* Castle, A.L. (1990). William R. Castle and the postwar transformation of Japan, 1945-1955. The Wisconsin Magazine of History, 74, 125-137.
 
-When I was flipping through the actual copies of The Statistical Abstract of the United States in the library back in college while having other editions in PDF format on my laptop it really gave me a sense of wonder in how far we've come in gathering and storing data...
+* Dingman, R. (1993). The dagger and the gift: The impact of the Korean War on Japan. Journal of American-East Asian Relations, 2, 29-55.
 
-...
-...
-...
+* Elbaum, B. (2007). How Godzilla ate Pittsburgh: The long rise of the Japanese iron and steel industry, 1900-1973. Social Science Japan Journal, 10, 243-264.
+
+* Fletcher, W.M. (2006). A miracle of sorts: The Japan Spinners Association and the recovery of the cotton textile industry, 1945-1952. UNC-Chapel Hill.
+
+* Kingston, J. (2010). Japan in transformation, 1945-2010. London: Routledge.
+
+* Miller, J.M. (2011). The struggle to rearm Japan: Negotiating the Cold War state in US-Japanese relations. Journal of Contemporary History, 46, 82-108.
+
+* Nakamura, T. & Odaka, K. (2003). The economic history of Japan: 1600-1900. (Vol. 3). (Noah S. Brannen, Trans.) Oxford University: Oxford University Press.
+
+* Nelson, P.A. (1998). Rivalry and cooperation: How the Japanese photography industry went global. (Unpublished doctoral dissertation). University of Warwick, UK.
+
+* Ohno, K. (2006). The economic development of Japan. Tokyo, Japan: GRIPS Development Forum
+
+* Schonberger, H. (1982). U.S. policy in post-war Japan: The retreat for liberalism. Science & Society, 46, 39-59.
+
+* Sugihara, K. (1999). International circumstances surrounding the postwar Japanese cotton textile industry. (Discussion paper). Graduate School of Economics and Osaka School of International Public Policy.
+
+* U.S. Census Bureau. (1955). Statistical Abstract of the United States: 1954. Washington, DC: U.S. Government Printing Office.
+
+* ... Statistical Abstract of the United States, 1955 to 1962 ...
 
 
+
+
+Further Reading:
+*
+*
+*
+*
