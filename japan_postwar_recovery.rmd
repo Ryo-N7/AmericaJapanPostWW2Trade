@@ -270,6 +270,38 @@ Japan_Textiles <- read_csv("Data/JapanCottonTextileExports(1946-1960).csv",
                                          "percentage_exports_USA"),
                            skip = 1)
 
+glimpse(Japan_Textiles)
+
+library(htmlwidgets)
+library(highcharter)
+
+colors <- RColorBrewer::brewer.pal(2, "Set1")
+
+highchart() %>%
+   hc_colors(colors) %>% 
+   hc_yAxis_multiples(
+     list(top = "0%", height = "30%", lineWidth = 3, opposite = TRUE, 
+          title = list(text = "% of Total Exports")),
+     list(top = "30%", height = "70%", offset = 0, 
+          title = list(text = "Total Exports (Millions sq. yards)"))
+   ) %>% 
+   hc_xAxis(title = list(text = "Year"), 
+            categories = Japan_Textiles$Year,
+            tickInterval = 1) %>% 
+   hc_add_series(name = "Total Exports", 
+                 data = Japan_Textiles, hcaes(Year, total_exports), 
+                 type = "spline", yAxis = 1,
+                 tooltip = list(valueSuffix = " M.Sq.Yards")) %>% 
+   hc_add_series(name = "Percentage (%) of Exports to USA", 
+                 data = Japan_Textiles, hcaes(Year, percentage_exports_USA), 
+                 type = "spline", yAxis = 0,
+                 tooltip = list(valueSuffix = "%", valueDecimals = "1")) %>% 
+   hc_tooltip(shared = TRUE,
+              borderColor = "black",
+              headerFormat = '<span style = "font-size: 14px"><b>{point.key}</b></span><br/>'
+              ) %>% 
+   hc_title(text = "Japan's Exports of Cotton Textiles")
+   
 
 ```
 
