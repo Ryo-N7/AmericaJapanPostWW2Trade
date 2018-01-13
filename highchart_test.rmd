@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Highcharter
-
+[conclusion](#conclusion)
 The `Highcharter` package by Joshua Kunst allows you to access the `Highcharts` JavaScript visualization library and can seamlessly fit into your workflow as it uses ` %>% ` to connect functions. For some examples check this [link](http://jkunst.com/highcharter/) out. To find out more about the myriad of options available to build your chart, check out the Highcharts API reference [here](https://api.highcharts.com/highcharts/). For the more advanced customizations you might need to know JS and/or HTML but Stack Overflow posts can help you out (tags: `highcharts` & `r-highcharter`)! Another great tutorial to learn `Highcharter` from is [here](http://paldhous.github.io/ucb/2016/dataviz/week13.html), another page out of Peter Aldhous' lecture notes!
 
 What I did here was to show across 2 different y-axes, the total amount of Japanese textile exports and the percentage of those exports heading to the USA. Instead of having them on one graph, I moved the axes labels to opposite sides and had each time series split up the y-axis space between them using the `hc_yAxis_multiples()` function. To make things easier to understand, I had the tooltip show the data for both time series using `hc_tooltip()` and customizing the labels for each series inside the tooltip with the `tooltip = ` argument inside `hc_add_series()` function.

@@ -123,7 +123,7 @@ $(document).ready(function () {
 
 <div id="highcharter" class="section level2">
 <h2>Highcharter</h2>
-<p>The <code>Highcharter</code> package by Joshua Kunst allows you to access the <code>Highcharts</code> JavaScript visualization library and can seamlessly fit into your workflow as it uses <code>%&gt;%</code> to connect functions. For some examples check this <a href="http://jkunst.com/highcharter/">link</a> out. To find out more about the myriad of options available to build your chart, check out the Highcharts API reference <a href="https://api.highcharts.com/highcharts/">here</a>. For the more advanced customizations you might need to know JS and/or HTML but Stack Overflow posts can help you out (tags: <code>highcharts</code> &amp; <code>r-highcharter</code>)! Another great tutorial to learn <code>Highcharter</code> from is <a href="http://paldhous.github.io/ucb/2016/dataviz/week13.html">here</a>, another page out of Peter Aldhous’ lecture notes!</p>
+<p><a href="#conclusion">conclusion</a> The <code>Highcharter</code> package by Joshua Kunst allows you to access the <code>Highcharts</code> JavaScript visualization library and can seamlessly fit into your workflow as it uses <code>%&gt;%</code> to connect functions. For some examples check this <a href="http://jkunst.com/highcharter/">link</a> out. To find out more about the myriad of options available to build your chart, check out the Highcharts API reference <a href="https://api.highcharts.com/highcharts/">here</a>. For the more advanced customizations you might need to know JS and/or HTML but Stack Overflow posts can help you out (tags: <code>highcharts</code> &amp; <code>r-highcharter</code>)! Another great tutorial to learn <code>Highcharter</code> from is <a href="http://paldhous.github.io/ucb/2016/dataviz/week13.html">here</a>, another page out of Peter Aldhous’ lecture notes!</p>
 <p>What I did here was to show across 2 different y-axes, the total amount of Japanese textile exports and the percentage of those exports heading to the USA. Instead of having them on one graph, I moved the axes labels to opposite sides and had each time series split up the y-axis space between them using the <code>hc_yAxis_multiples()</code> function. To make things easier to understand, I had the tooltip show the data for both time series using <code>hc_tooltip()</code> and customizing the labels for each series inside the tooltip with the <code>tooltip =</code> argument inside <code>hc_add_series()</code> function.</p>
 <pre class="r"><code>library(dplyr)    # pipes and dplyr verbs</code></pre>
 <pre><code>## 
@@ -165,7 +165,7 @@ library(highcharter)</code></pre>
 ## not free for commercial and Governmental use</code></pre>
 <pre class="r"><code>colors &lt;- RColorBrewer::brewer.pal(2, &quot;Set1&quot;)</code></pre>
 <pre><code>## Warning in RColorBrewer::brewer.pal(2, &quot;Set1&quot;): minimal value for n is 3, returning requested palette with 3 different levels</code></pre>
-<pre class="r"><code>highchart() %&gt;%
+<pre class="r"><code>textiles_chart &lt;- highchart() %&gt;%
    hc_colors(colors) %&gt;% 
    hc_yAxis_multiples(
      list(top = &quot;0%&quot;, height = &quot;30%&quot;, lineWidth = 3, opposite = TRUE, 
@@ -188,9 +188,9 @@ library(highcharter)</code></pre>
               borderColor = &quot;black&quot;,
               headerFormat = '&lt;span style = &quot;font-size: 14px&quot;&gt;&lt;b&gt;{point.key}&lt;/b&gt;&lt;/span&gt;&lt;br/&gt;'
               ) %&gt;% 
-   hc_title(text = &quot;Japan's Exports of Cotton Textiles (1946-1960)&quot;)</code></pre>
-<iframe src="textiles_chart.html" width="100%" height="500" frameborder="0" marginheight="0" marginwidth="0">
-</iframe>
+   hc_title(text = &quot;Japan's Exports of Cotton Textiles (1946-1960)&quot;)
+   
+saveWidget(textiles_chart, &quot;textiles_chart.html&quot;, selfcontained = TRUE, background = &quot;white&quot;)</code></pre>
 <p>You can even export what you’ve made as a standalone web page using the <code>saveWidget()</code> function from the <code>htmlwidgets</code> package!</p>
 </div>
 <div id="conclusion" class="section level2">
