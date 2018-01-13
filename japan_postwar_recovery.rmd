@@ -84,7 +84,7 @@ For other tutorials take a look at gganimate's [Github repo](https://github.com/
 
 If you're more of a video person or just want something to watch while grabbing some lunch here is David Robinson talking about gganimate at [Plotcon 2016](https://www.youtube.com/watch?v=9Y7Y1s4-VdA&t=1549s).
 
-```{r steel animated, fig.show = "animate"}
+```{r steel animated, fig.show = "animate", fig.height=7, fig.width=8, fig.align='center' }
 library(gganimate) # animations
 
 Steel_Animate <- Japan_Steel %>% 
@@ -105,7 +105,7 @@ Steel_Animate <- Japan_Steel %>%
        title = "Japan Steel Production\n(1950-1960)",
        caption = "Source: Historical Statistics of Japan, 2012") 
 
-gganimate(Steel_Animate)
+gganimate(Steel_Animate, ani.width = 800, ani.height = 500, "Steel_Animate.gif")
 
 ```
 
@@ -218,7 +218,7 @@ Now from the original 16 rows/observations we now have 1712 rows due to creating
 
 After saving everything as a ggplot object, we can use the `ani.options()` function to specify a variety of animation options, here we speed up the time interval between frames. Then, as before, we can gganimate and **Voila**!
 
-```{r camera animate}
+```{r camera animate, fig.show = "animate", fig.height=7, fig.width=8, fig.align='center' }
 
 Camera_Animate <- Camera_Tween %>% 
     ggplot(aes(x = Year, y = Camera_Production, frame = .frame)) + 
@@ -250,7 +250,7 @@ Camera_Animate <- Camera_Tween %>%
 
 animation::ani.options(interval = 0.05)   
 
-gganimate(Camera_Animate)
+gganimate(Camera_Animate, ani.width = 800, ani.height = 500, "Camera_Animate.gif")
 
 ```
 
@@ -272,7 +272,6 @@ The `Highcharter` package by Joshua Kunst allows you to access the `Highcharts` 
 
 What I did here was to show across 2 different y-axes, the total amount of Japanese textile exports and the percentage of those exports heading to the USA. Instead of having them on one graph, I moved the axes labels to opposite sides and had each time series split up the y-axis space between them using the `hc_yAxis_multiples()` function. To make things easier to understand, I had the tooltip show the data for both time series using `hc_tooltip()` and customizing the labels for each series inside the tooltip with the `tooltip = ` argument inside `hc_add_series()` function.
 
-
 ```{r textiles static}
 Japan_Textiles <- read_csv("Data/JapanCottonTextileExports(1946-1960).csv",
                            col_names = c("Year", "total_exports", "exports_to_USA",
@@ -284,7 +283,7 @@ library(highcharter)
 
 colors <- RColorBrewer::brewer.pal(2, "Set1")
 
-highchart() %>%
+textiles_chart <- highchart() %>%
    hc_colors(colors) %>% 
    hc_yAxis_multiples(
      list(top = "0%", height = "30%", lineWidth = 3, opposite = TRUE, 
@@ -309,6 +308,7 @@ highchart() %>%
               ) %>% 
    hc_title(text = "Japan's Exports of Cotton Textiles (1946-1960)")
    
+saveWidget(textiles_chart, "textiles_chart.html", selfcontained = TRUE, background = "white")
 
 ```
 

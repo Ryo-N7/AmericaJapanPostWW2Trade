@@ -1,26 +1,34 @@
----
-title: "asdf"
-author: "RN7"
-date: "January 12, 2018"
-output: 
-  md_document:
-    variant: markdown_github
-always_allow_html: yes
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+``` r
+library(dplyr)    # pipes and dplyr verbs
 ```
 
-```{r packages steel static}
-library(dplyr)    # pipes and dplyr verbs
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
 library(readr)    # reading in .csv files
 
 library(ggplot2)  # plotting
 library(ggthemes) # ggplot2 themes
 library(scales)   # ggplot2 scaling options
+```
 
+    ## 
+    ## Attaching package: 'scales'
 
+    ## The following object is masked from 'package:readr':
+    ## 
+    ##     col_factor
+
+``` r
 Japan_Steel <- readxl::read_xls("Data/iron_steel_production_1948-2004.xls",
                              skip = 7,
                              col_names = c("J_Year", "Year", "Pig_iron", 
@@ -46,18 +54,20 @@ Japan_Steel %>%
   labs(x = "Year", y = "Steel Production (Thousands of tons)", 
        title = "Japan Steel Production\n(1950-1960)",
        caption = "Source: Historical Statistics of Japan, 2012") 
-
 ```
 
-## Introducing `gganimate`!
+![](animate.gif)
 
-The idea behind gganimate is simple, as the name implies the animation part of a plot becomes just another aesthetic within the `ggplot` concept. This package is dependent on [ImageMagick](https://www.imagemagick.org/script/download.php) and FFmpeg to save your plots as GIFs or videos so make sure you have those installed as well. Once all that's done, go into the `ggplot()` code you previously made and it's just as simple as adding in `frame = ____ ` (whatever the variable you want to create an individual frame out of). You can also include `cumulative = TRUE` if you want to keep previous frames of added data on the plot as you change to the next frames. 
+Introducing `gganimate`!
+------------------------
+
+The idea behind gganimate is simple, as the name implies the animation part of a plot becomes just another aesthetic within the `ggplot` concept. This package is dependent on [ImageMagick](https://www.imagemagick.org/script/download.php) and FFmpeg to save your plots as GIFs or videos so make sure you have those installed as well. Once all that's done, go into the `ggplot()` code you previously made and it's just as simple as adding in `frame = ____` (whatever the variable you want to create an individual frame out of). You can also include `cumulative = TRUE` if you want to keep previous frames of added data on the plot as you change to the next frames.
 
 For other tutorials take a look at gganimate's [Github repo](https://github.com/dgrtwo/gganimate) for a short tutorial or take a look at Peter Aldhous' lecture notes on [Iteration & Animation (with ggplot2)](http://paldhous.github.io/ucb/2016/dataviz/week14.html).
 
 If you're more of a video person or just want something to watch while grabbing some lunch here is David Robinson talking about gganimate at [Plotcon 2016](https://www.youtube.com/watch?v=9Y7Y1s4-VdA&t=1549s).
 
-```{r steel animated, fig.show = "animate", fig.height=7, fig.width=8, fig.align='center' }
+``` r
 library(gganimate) # animations
 
 Steel_Animate <- Japan_Steel %>% 
@@ -78,6 +88,14 @@ Steel_Animate <- Japan_Steel %>%
        title = "Japan Steel Production\n(1950-1960)",
        caption = "Source: Historical Statistics of Japan, 2012") 
 
-gganimate(Steel_Animate, ani.width = 800, ani.height = 500, "animate.gif")
-
+gganimate(Steel_Animate, "animate.mp4")
 ```
+
+    ## geom_path: Each group consists of only one observation. Do you need to
+    ## adjust the group aesthetic?
+
+    ## Executing: "ffmpeg" -y -framerate 1 -i Rplot%d.png -pix_fmt yuv420p animate.mp4
+
+    ## 
+    ## 
+    ## Video has been created at: C:\Users\Ryo Nakagawara\Documents\R_materials\AmericaJapanPostWW2Trade\animate.mp4
